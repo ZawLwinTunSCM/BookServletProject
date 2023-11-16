@@ -9,9 +9,9 @@ public interface BookDao {
 
     public List<Book> getAllBooks();
 
-    public void deleteBook(int id);
-
     public Book selectBook(int id);
 
     public void updateBook(Book book);
+
+    public void deleteBook(int id);
 }

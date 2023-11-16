@@ -69,17 +69,6 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
-    public void deleteBook(int id) {
-        try (Connection connection = getConnection();
-                PreparedStatement statement = connection.prepareStatement(DELETE_BOOKS_SQL)) {
-            statement.setInt(1, id);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
     public Book selectBook(int id) {
         Book book = null;
         try (Connection connection = getConnection();
@@ -108,6 +97,17 @@ public class BookDaoImpl implements BookDao {
             statement.setString(2, book.getAuthor());
             statement.setInt(3, book.getPrice());
             statement.setInt(4, book.getId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void deleteBook(int id) {
+        try (Connection connection = getConnection();
+                PreparedStatement statement = connection.prepareStatement(DELETE_BOOKS_SQL)) {
+            statement.setInt(1, id);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

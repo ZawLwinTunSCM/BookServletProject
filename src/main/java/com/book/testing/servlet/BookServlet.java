@@ -37,14 +37,14 @@ public class BookServlet extends HttpServlet {
             case "/insert":
                 insertBook(request, response);
                 break;
-            case "/delete":
-                deleteBook(request, response);
-                break;
             case "/edit":
                 showEditForm(request, response);
                 break;
             case "/update":
                 updateBook(request, response);
+                break;
+            case "/delete":
+                deleteBook(request, response);
                 break;
             default:
                 listBooks(request, response);
@@ -61,16 +61,22 @@ public class BookServlet extends HttpServlet {
         doGet(request, response);
     }
 
+    private void showNewForm(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        forwardToPage("/jsp/register.jsp", request, response);
+    }
+
+    private void insertBook(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+        Book newBook = createBookFromRequest(request);
+        bookDao.insertBook(newBook);
+        redirectToPage("list", response);
+    }
+
     private void listBooks(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         List<Book> books = bookDao.getAllBooks();
         request.setAttribute("listBook", books);
         forwardToPage("/jsp/list.jsp", request, response);
-    }
-
-    private void showNewForm(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        forwardToPage("/jsp/register.jsp", request, response);
     }
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response)
@@ -79,12 +85,6 @@ public class BookServlet extends HttpServlet {
         Book book = bookDao.selectBook(id);
         request.setAttribute("book", book);
         forwardToPage("/jsp/register.jsp", request, response);
-    }
-
-    private void insertBook(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
-        Book newBook = createBookFromRequest(request);
-        bookDao.insertBook(newBook);
-        redirectToPage("list", response);
     }
 
     private void updateBook(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
